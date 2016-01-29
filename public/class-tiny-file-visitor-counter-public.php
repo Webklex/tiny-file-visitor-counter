@@ -96,8 +96,54 @@ class Tiny_File_Visitor_Counter_Public {
 		 * class.
 		 */
 
+		wp_enqueue_script( $this->plugin_name.'-js-counter', plugin_dir_url( __FILE__ ) . 'js/js-counter.js', array( 'jquery' ), $this->version, false );
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/tiny-file-visitor-counter-public.js', array( 'jquery' ), $this->version, false );
 
+		$options = get_option($this->plugin_name);
+
+		$hash = md5('tiny-file-visitor-counter-nonce-'.date('YmdH'));
+		$nonce = wp_create_nonce($hash);
+
+		$options['backend'] = admin_url('admin-ajax.php').'?action=my_action&nonce='.$nonce;
+		$options['nonce'] = $nonce;
+		$options['live'] = ($options['live']==1?true:false);
+
+		wp_localize_script($this->plugin_name, 'php_vars', $options );
 	}
 
+	public function my_action(){
+		header( "Content-Type: application/json" );
+		$hash = md5('tiny-file-visitor-counter-nonce-'.date('YmdH'));
+		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], $hash ) ){
+			echo json_encode( array(
+				'success' => false,
+				'time' => time(),
+				'message' => 'Invalid Nonce'
+			));
+		}else{
+			require_once plugin_dir_path( __FILE__ ) .'../lib/CounterBackend.php';
+
+			$options = get_option($this->plugin_name);
+			$counter = new CounterBackend([
+				'api' => $options['api'],
+				'countTime' => $options['countTime'],
+				'json' => true
+			], [
+				'file' => $options['db'].'/counter.db',
+				'backup' => $options['db'].'/backup',
+			]);
+
+			$statistics = $counter->getStatistics();
+
+			$hash = md5('tiny-file-visitor-counter-nonce-'.date('YmdH'));
+			$nonce = wp_create_nonce($hash);
+
+			$statistics['backend'] = admin_url('admin-ajax.php').'?action=my_action&nonce='.$nonce.'&time='.time();
+			$statistics['nonce'] = $nonce;
+			$statistics['success'] = true;
+
+			echo json_encode($statistics);
+		}
+		exit;
+	}
 }

@@ -100,4 +100,86 @@ class Tiny_File_Visitor_Counter_Admin {
 
 	}
 
+
+	/**
+	 * Register the administration menu for this plugin into the WordPress Dashboard menu.
+	 * Add a settings page for this plugin to the Settings menu.
+	 *
+	 * NOTE:  Alternative menu locations are available via WordPress administration menu functions.
+	 *        Administration Menus: http://codex.wordpress.org/Administration_Menus
+	 *
+	 * @since    1.0.0
+	 */
+	public function add_plugin_admin_menu() {
+		add_options_page(
+			'TF Counter Configuration',
+			'TF Counter',
+			'manage_options',
+			$this->plugin_name,
+			[
+				$this,
+				'display_plugin_setup_page'
+			]
+		);
+	}
+
+	/**
+	 * Add settings action link to the plugins page.
+	 * Documentation : https://codex.wordpress.org/Plugin_API/Filter_Reference/plugin_action_links_(plugin_file_name)
+	 *
+	 * @since    1.0.0
+	 */
+
+	public function add_action_links($links) {
+		$settings_link = array(
+			'<a href="' . admin_url( 'options-general.php?page=' . $this->plugin_name ) . '">'.
+			__('Settings', $this->plugin_name).
+			'</a>',
+		);
+		return array_merge($settings_link, $links);
+
+	}
+
+	/**
+	 * Render the settings page for this plugin.
+	 *
+	 * @since    1.0.0
+	 */
+
+	public function display_plugin_setup_page() {
+		include_once( 'partials/tiny-file-visitor-counter-admin-display.php' );
+	}
+
+	public function options_update() {
+		register_setting($this->plugin_name, $this->plugin_name, [$this, 'validate']);
+	}
+
+	public function validate($input) {
+		$valid = [];
+
+		//Checkboxes
+		$valid['backup'] = (isset($input['backup']) && !empty($input['backup'])) ? 1 : 0;
+		$valid['live'] = (isset($input['live']) && !empty($input['live'])) ? 1 : 0;
+		$valid['online'] = (isset($input['online']) && !empty($input['online'])) ? 1: 0;
+		$valid['lastDay'] = (isset($input['lastDay']) && !empty($input['lastDay'])) ? 1 : 0;
+		$valid['lastWeek'] = (isset($input['lastWeek']) && !empty($input['lastWeek'])) ? 1 : 0;
+		$valid['lastMonth'] = (isset($input['lastMonth']) && !empty($input['lastMonth'])) ? 1 : 0;
+		$valid['lastYear'] = (isset($input['lastYear']) && !empty($input['lastYear'])) ? 1 : 0;
+
+		//labels
+		$valid['onlineLabel'] = $input['onlineLabel'];
+		$valid['timeout'] = intval($input['timeout']);
+		$valid['countTime'] = intval($input['countTime']);
+		$valid['lastDayLabel'] = $input['lastDayLabel'];
+		$valid['lastWeekLabel'] = $input['lastWeekLabel'];
+		$valid['lastMonthLabel'] = $input['lastMonthLabel'];
+		$valid['lastYearLabel'] = $input['lastYearLabel'];
+
+		//URLs
+		$valid['api'] = esc_url($input['api']);
+		$valid['db'] = $input['db'];
+
+		return $valid;
+	}
+
 }

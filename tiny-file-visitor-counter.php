@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       Tiny File Visitor Counter
  * Plugin URI:        https://github.com/Webklex/tiny-file-visitor-counter
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       This Plugin provides you with some basic visitor statistics
  * Version:           1.0.0
  * Author:            Malte Goldenbaum
  * Author URI:        http://webklex.com

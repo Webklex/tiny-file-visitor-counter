@@ -12,5 +12,4 @@
  * @subpackage Tiny_File_Visitor_Counter/public/partials
  */
 ?>
-
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
