@@ -15,18 +15,18 @@ This Plugin provides you with some very basic and simple visitor counter for you
 
 There isn't much to say about this plugin. Just give it a try and find out ;)
 
-== Installation ==
+## Installation
 
 1. Upload `tiny-file-visitor-counter.zip` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Head over to the settings section and push at least once the save button
 
 
-== Screenshots ==
+## Screenshots
 
 Havn't done any jet..
 
-== Changelog ==
+## Changelog
 
-= 0.01a =
+#### 0.01a
 * INIT
