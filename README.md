@@ -21,6 +21,18 @@ There isn't much to say about this plugin. Just give it a try and find out ;)
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Head over to the settings section and push at least once the save button
 
+## Usage
+
+After you activated the plugin you can access the plugin anywhere at any time you want.
+Just place some of the following HTML code right there where you want the statistics displayed:
+```
+Now Online:  <js-counter-online></js-counter-online>
+Last day:    <js-counter-day></js-counter-day>
+Last week:   <js-counter-day7></js-counter-day7>
+Last month:  <js-counter-day30></js-counter-day30>
+Last year:   <js-counter-year></js-counter-year>
+```
+An example could be a text widget which might be placed somewhere in the sidebar or footer section.
 
 ## Screenshots
 
